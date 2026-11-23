@@ -1,0 +1,30 @@
+{
+  "apps": [
+    {
+      "id": "qareeb",
+      "name": "قريب",
+      "tagline": "مراسلة مباشرة بدون سيرفر",
+      "description": "تطبيق مراسلة شبيه بتيليجرام يعمل بين الأجهزة مباشرة (P2P) بدون الحاجة إلى سيرفر.",
+      "category": "تواصل",
+      "version": "1.0.0",
+      "size": "12 MB",
+      "iconUrl": "",
+      "apkUrl": "",
+      "changelog": "الإصدار الأول",
+      "screenshots": []
+    },
+    {
+      "id": "shilagram",
+      "name": "شيلاغرام",
+      "tagline": "تطبيق مراسلة",
+      "description": "تطبيق مراسلة عصري بتصميم أنيق.",
+      "category": "تواصل",
+      "version": "0.5.0",
+      "size": "18 MB",
+      "iconUrl": "",
+      "apkUrl": "",
+      "changelog": "نسخة تجريبية",
+      "screenshots": []
+    }
+  ]
+}
