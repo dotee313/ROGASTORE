@@ -17,7 +17,7 @@
 | `iconUrl` | رابط كامل أو مسار داخل المستودع مثل `assets/logo_shg.svg`. يدعم SVG و PNG/JPG |
 | `apkUrl` | **رابط تنزيل مباشر عام** (مثلاً رابط Releases). لا تستخدم روابط Actions artifacts |
 | `packageName` | اسم حزمة أندرويد، ويُستخدم لمطابقة التطبيق المثبّت عند فحص التحديثات |
-| `screenshots` | روابط صور PNG/JPG |
+| `screenshots` | روابط صور PNG/JPG أو مسارات نسبية مثل `screenshots/shilagram/01.jpg` (تُحلّ تلقائياً إلى raw المستودع). الصور الحالية مخزّنة في مجلد `screenshots/` |
 | `reviews` | تقييمات أولية اختيارية (`author`, `rating`, `text`, `date`) |
 
 مثال على رابط APK صالح:

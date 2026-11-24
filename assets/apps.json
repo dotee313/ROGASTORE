@@ -27,7 +27,24 @@
       "apkUrl": "https://github.com/d90f90y90-code/Shilagram/releases/download/latest/shilagram.apk",
       "changelog": "نسخة تجريبية جديدة",
       "packageName": "app.shilagram",
-      "screenshots": [],
+      "screenshots": [
+        "screenshots/shilagram/01.jpg",
+        "screenshots/shilagram/02.jpg",
+        "screenshots/shilagram/03.jpg",
+        "screenshots/shilagram/04.jpg",
+        "screenshots/shilagram/05.jpg",
+        "screenshots/shilagram/06.jpg",
+        "screenshots/shilagram/07.jpg",
+        "screenshots/shilagram/08.jpg",
+        "screenshots/shilagram/09.jpg",
+        "screenshots/shilagram/10.jpg",
+        "screenshots/shilagram/11.jpg",
+        "screenshots/shilagram/12.jpg",
+        "screenshots/shilagram/13.jpg",
+        "screenshots/shilagram/14.jpg",
+        "screenshots/shilagram/15.jpg",
+        "screenshots/shilagram/16.jpg"
+      ],
       "reviews": [
         {
           "author": "روجا",
@@ -49,7 +66,16 @@
       "apkUrl": "",
       "changelog": "ما الجديد",
       "packageName": "com.xowl.browser",
-      "screenshots": [],
+      "screenshots": [
+        "screenshots/ishbow/01.jpg",
+        "screenshots/ishbow/02.jpg",
+        "screenshots/ishbow/03.jpg",
+        "screenshots/ishbow/04.jpg",
+        "screenshots/ishbow/05.jpg",
+        "screenshots/ishbow/06.jpg",
+        "screenshots/ishbow/07.jpg",
+        "screenshots/ishbow/08.jpg"
+      ],
       "reviews": []
     }
   ]
