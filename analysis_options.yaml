@@ -1,0 +1,6 @@
+# تحليل المشروع بدون اعتماد على حزم lints خارجية حتى يعمل البناء في CI.
+analyzer:
+  errors:
+    # إهمال Flutter 3.47+ لمaterial.dart وبعض الخصائص لا يجب أن يفشل البناء.
+    # باقي الأخطاء الحقيقية تظل قاتلة.
+    deprecated_member_use: ignore

@@ -473,14 +473,14 @@ class _DetailsPageState extends State<DetailsPage> {
             valueListenable: updateManager.active,
             builder: (context, s, _) {
               final mine = s != null && s.id == app.id;
-              final busy = mine && !(s?.done ?? false) && s?.error == null;
-              final done = mine && (s?.done ?? false);
+              final busy = mine && !s.done && s.error == null;
+              final done = mine && s.done;
               final label = !app.hasApk
                   ? 'قريبًا'
                   : busy
-                      ? ((s?.progress ?? 0) < 0
+                      ? (s.progress < 0
                           ? 'جارٍ التنزيل...'
-                          : '${(((s?.progress ?? 0) * 100).toInt())}%')
+                          : '${((s.progress * 100).toInt())}%')
                       : done
                           ? 'تم التنزيل — اضغط للتثبيت'
                           : hasUpdate
