@@ -1,5 +1,5 @@
 {
-  "version": "0.0.0",
-  "apkUrl": "",
-  "notes": ""
+  "version": "0.2.0",
+  "apkUrl": "https://github.com/dotee313/ROGASTORE/releases/download/v0.2.0/app-release.apk",
+  "notes": "تحسين تحميل الصور، ودعم التقييمات، وإصلاح فحص التحديثات"
 }

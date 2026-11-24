@@ -203,6 +203,42 @@ class AppIcon extends StatelessWidget {
   }
 }
 
+/// صورة بعيدة تُحمّل مرة واحدة عبر الكاش نفسه الذي تستخدمه الأيقونات،
+/// لتجنّب اختفاء الصور عند فشل Image.network داخل التطبيق.
+class _RemoteImage extends StatelessWidget {
+  final String url;
+  final double width;
+  final double height;
+
+  const _RemoteImage(this.url, {this.width = 140, this.height = 210});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: FutureBuilder<Uint8List>(
+        future: fetchBytes(url),
+        builder: (context, snap) {
+          if (snap.hasData) {
+            return Image.memory(snap.data!,
+                width: width, height: height, fit: BoxFit.cover);
+          }
+          return Container(
+            width: width,
+            height: height,
+            color: C.card,
+            alignment: Alignment.center,
+            child: snap.hasError
+                ? const Icon(Icons.image_not_supported_outlined,
+                    color: C.purpleLight)
+                : const CircularProgressIndicator(color: C.gold, strokeWidth: 2),
+          );
+        },
+      ),
+    );
+  }
+}
+
 class StorePage extends StatefulWidget {
   const StorePage({super.key});
   @override
@@ -523,20 +559,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: app.screenshotLinks.length,
                 separatorBuilder: (_, __) => const SizedBox(width: 10),
-                itemBuilder: (_, i) => ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.network(app.screenshotLinks[i],
-                      width: 140,
-                      height: 210,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
-                          width: 140,
-                          height: 210,
-                          color: C.card,
-                          alignment: Alignment.center,
-                          child: const Icon(Icons.image_not_supported_outlined,
-                              color: C.purpleLight))),
-                ),
+                itemBuilder: (_, i) => _RemoteImage(app.screenshotLinks[i]),
               ),
             ),
           ],
