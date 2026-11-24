@@ -1,17 +1,56 @@
 {
   "apps": [
     {
-      "id": "shilagram",
-      "name": "شيلاغرام",
-      "tagline": "تطبيق مراسلة",
-      "description": "تطبيق مراسلة عصري بتصميم أنيق.",
+      "id": "qareeb",
+      "name": "قريب",
+      "tagline": "مراسلة مباشرة بين الأجهزة بدون سيرفر",
+      "description": "تطبيق مراسلة شبيه بتيليجرام يعمل بين الأجهزة مباشرة (P2P) بدون الحاجة إلى سيرفر. الإصدار الأول لا يزال قيد التطوير.",
       "category": "تواصل",
-      "version": "0.5.0",
-      "size": "18 MB",
+      "version": "1.0.0",
+      "size": "12 MB",
       "iconUrl": "",
       "apkUrl": "",
-      "changelog": "نسخة تجريبية",
-      "screenshots": []
+      "changelog": "الإصدار الأول",
+      "packageName": "",
+      "screenshots": [],
+      "reviews": []
+    },
+    {
+      "id": "shilagram",
+      "name": "شيلاغرام",
+      "tagline": "تطبيق مراسلة عصري بتصميم أنيق",
+      "description": "تطبيق مراسلة عصري يعمل مباشرة بين الأجهزة مع ميزات المجموعات والقنوات والمشاركة.",
+      "category": "تواصل",
+      "version": "3.1",
+      "size": "0.5 MB",
+      "iconUrl": "assets/logo_shg.svg",
+      "apkUrl": "https://github.com/d90f90y90-code/Shilagram/releases/download/latest/shilagram.apk",
+      "changelog": "نسخة تجريبية جديدة",
+      "packageName": "app.shilagram",
+      "screenshots": [],
+      "reviews": [
+        {
+          "author": "روجا",
+          "rating": 5,
+          "text": "تطبيق خفيف وسريع.",
+          "date": "2026-11-20"
+        }
+      ]
+    },
+    {
+      "id": "ishbow",
+      "name": "متصفح إيشبو",
+      "tagline": "متصفح أندرويد خفيف ولا لجوجل",
+      "description": "متصفح أندرويد خفيف بمبدأ لا لجوجل، مع مضيف سكربتات مستخدم (User Scripts) شبيه بـ Via.",
+      "category": "أدوات",
+      "version": "1.3",
+      "size": "0.09 MB",
+      "iconUrl": "https://raw.githubusercontent.com/hamod-man/Ishbow/main/app/src/main/assets/logo.png",
+      "apkUrl": "",
+      "changelog": "ما الجديد",
+      "packageName": "com.xowl.browser",
+      "screenshots": [],
+      "reviews": []
     }
   ]
 }

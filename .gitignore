@@ -1,0 +1,8 @@
+.dart_tool/
+.idea/
+.vscode/
+build/
+android/
+test/
+assets/icon.png
+*.apk
