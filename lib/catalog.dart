@@ -66,7 +66,8 @@ class CatalogReview {
       rating: (j['rating'] is num
               ? (j['rating'] as num).toInt()
               : int.tryParse(j['rating'].toString()) ?? 5)
-          .clamp(1, 5),
+          .clamp(1, 5)
+          .toInt(),
       text: (j['text'] ?? '').toString(),
       date: (j['date'] ?? '').toString(),
     );
