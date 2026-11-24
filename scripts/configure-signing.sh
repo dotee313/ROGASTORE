@@ -9,10 +9,11 @@ set -euo pipefail
 : "${ANDROID_KEY_PASSWORD:?ANDROID_KEY_PASSWORD is missing}"
 
 mkdir -p android/app
-printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/roga-release.jks
+printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/roga-release.jks
 
 python3 - <<'PY'
 import os
+import re
 from pathlib import Path
 
 alias = os.environ['ANDROID_KEY_ALIAS']
@@ -25,7 +26,7 @@ groovy = Path('android/app/build.gradle')
 if kts.exists():
     p = kts
     text = p.read_text()
-    if 'signingConfigs' not in text:
+    if not re.search(r'signingConfigs\s*\{', text):
         block = (
             '    signingConfigs {\n'
             f'        create("{alias}") {{\n'
@@ -42,13 +43,13 @@ if kts.exists():
         'signingConfig = signingConfigs.getByName("debug")',
         f'signingConfig = signingConfigs.getByName("{alias}")',
     )
-    if f'getByName("{alias}")' not in text:
+    if not re.search(r'create\("' + re.escape(alias) + r'"\)', text):
         raise SystemExit('Kotlin DSL signing config was not applied')
     p.write_text(text)
 elif groovy.exists():
     p = groovy
     text = p.read_text()
-    if 'signingConfigs' not in text:
+    if not re.search(r'signingConfigs\s*\{', text):
         block = (
             '    signingConfigs {\n'
             '        release {\n'
