@@ -178,6 +178,4 @@ grant execute on function public.admin_delete_user(uuid) to authenticated;
 -- where lower(email) = 'yourname@gmail.com';
 --
 -- ملاحظة: مفتاح anon Key الذي يُوضع في التطبيق عام بالتصميم.
-update public.profiles set role='admin'
-where lower(email)='d90f90y90@gmail.com';
 -- الحماية الحقيقية هي سياسات RLS أعلاه، وليس إخفاء المفتاح.
