@@ -35,17 +35,17 @@
 
 ```json
 {
-  "version": "0.3.0",
-  "apkUrl": "https://github.com/dotee313/ROGASTORE/releases/download/v0.3.0/app-release.apk",
+  "version": "0.4.0",
+  "apkUrl": "https://github.com/dotee313/ROGASTORE/releases/download/v0.4.0/app-release.apk",
   "notes": "تحسينات وتحديثات"
 }
 ```
 
 ارفع الرقم فقط عندما تنشر إصداراً حقيقياً؛ إذا كان `apkUrl` فارغاً فلن يحدث تنزيل.
-عند دفع وسم `v0.3.0` يقوم workflow `release.yml` ببناء APK وإرفاقه بالإصدار تلقائياً.
+عند دفع وسم `v0.4.0` يقوم workflow `release.yml` ببناء APK وإرفاقه بالإصدار تلقائياً.
 
-الإصدار الحالي المفعّل للتحديث الذاتي هو `v0.3.0`، ورابطه المباشر:
-`https://github.com/dotee313/ROGASTORE/releases/download/v0.3.0/app-release.apk`
+الإصدار الحالي المفعّل للتحديث الذاتي هو `v0.4.0`، ورابطه المباشر:
+`https://github.com/dotee313/ROGASTORE/releases/download/v0.4.0/app-release.apk`
 عند نشر إصدار جديد: حدّث `version` و`apkUrl` في هذا الملف، ثم ادفع وسم الإصدار.
 
 ## التقييمات والتعليقات
