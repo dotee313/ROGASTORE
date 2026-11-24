@@ -35,17 +35,17 @@
 
 ```json
 {
-  "version": "0.4.2",
-  "apkUrl": "https://github.com/dotee313/ROGASTORE/releases/download/v0.4.2/app-release.apk",
+  "version": "0.4.3",
+  "apkUrl": "https://github.com/dotee313/ROGASTORE/releases/download/v0.4.3/app-release.apk",
   "notes": "تحسينات وتحديثات"
 }
 ```
 
 ارفع الرقم فقط عندما تنشر إصداراً حقيقياً؛ إذا كان `apkUrl` فارغاً فلن يحدث تنزيل.
-عند دفع وسم `v0.4.2` يقوم workflow `release.yml` ببناء APK وإرفاقه بالإصدار تلقائياً.
+عند دفع وسم `v0.4.3` يقوم workflow `release.yml` ببناء APK وإرفاقه بالإصدار تلقائياً.
 
-الإصدار الحالي المفعّل للتحديث الذاتي هو `v0.4.2`، ورابطه المباشر:
-`https://github.com/dotee313/ROGASTORE/releases/download/v0.4.2/app-release.apk`
+الإصدار الحالي المفعّل للتحديث الذاتي هو `v0.4.3`، ورابطه المباشر:
+`https://github.com/dotee313/ROGASTORE/releases/download/v0.4.3/app-release.apk`
 عند نشر إصدار جديد: حدّث `version` و`apkUrl` في هذا الملف، ثم ادفع وسم الإصدار.
 
 ## توقيع APK (مفتاح واحد لكل الإصدارات)
@@ -73,12 +73,12 @@
 
 المخطط الكامل موجود في `supabase/schema.sql`. نفّذه من SQL Editor في مشروع Supabase، ثم:
 
-1. أنشئ حسابك بإيميل `@fatimiyoun.me` (التسجيل مفتوح لهذا النطاق فقط، ويُمنع أي نطاق آخر على مستوى الخادم).
+1. أنشئ حسابك بإيميل `@gmail.com` (التسجيل مفتوح لهذا النطاق فقط، ويُمنع أي نطاق آخر على مستوى الخادم).
 2. امنح نفسك صلاحية الأدمن من SQL Editor:
 
    ```sql
    update public.profiles set role = 'admin'
-   where lower(email) = 'yourname@fatimiyoun.me';
+   where lower(email) = 'yourname@gmail.com';
    ```
 
 3. أضف السرّين التاليين في `Settings → Secrets and variables → Actions` للمستودع:

@@ -3,7 +3,7 @@
 const String supabaseUrl = String.fromEnvironment('SUPABASE_URL');
 const String supabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
 
-const String allowedEmailDomain = 'fatimiyoun.me';
+const String allowedEmailDomain = 'gmail.com';
 
 bool get backendReady =>
     supabaseUrl.trim().isNotEmpty && supabaseAnonKey.trim().isNotEmpty;

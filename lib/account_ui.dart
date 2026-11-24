@@ -102,7 +102,7 @@ class _AccountPageState extends State<AccountPage> {
           controller: _email,
           keyboardType: TextInputType.emailAddress,
           style: const TextStyle(color: C.gold),
-          decoration: _input('name@fatimiyoun.me'),
+          decoration: _input('name@gmail.com'),
         ),
         const SizedBox(height: 12),
         TextField(

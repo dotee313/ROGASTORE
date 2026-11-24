@@ -5,15 +5,15 @@
 
 create extension if not exists pgcrypto;
 
--- 1) السماح بإيميلات @fatimiyoun.me فقط عند إنشاء حساب في Supabase Auth.
+-- 1) السماح بإيميلات @gmail.com فقط عند إنشاء حساب في Supabase Auth.
 create or replace function public.validate_email_domain()
 returns trigger
 language plpgsql
 as $$
 begin
   if new.email is null
-     or lower(split_part(new.email, '@', 2)) <> 'fatimiyoun.me' then
-    raise exception 'يُسمح فقط بإيميلات @fatimiyoun.me';
+     or lower(split_part(new.email, '@', 2)) <> 'gmail.com' then
+    raise exception 'يُسمح فقط بإيميلات @gmail.com';
   end if;
   return new;
 end;
@@ -175,9 +175,9 @@ grant execute on function public.admin_delete_user(uuid) to authenticated;
 -- 7) بعد إنشاء حسابك، امنح نفسك صلاحية الأدمن من SQL Editor:
 -- update public.profiles
 -- set role = 'admin'
--- where lower(email) = 'yourname@fatimiyoun.me';
+-- where lower(email) = 'yourname@gmail.com';
 --
 -- ملاحظة: مفتاح anon Key الذي يُوضع في التطبيق عام بالتصميم.
 update public.profiles set role='admin'
-where lower(email)='k9ook9@fatimiyoun.me';
+where lower(email)='d90f90y90@gmail.com';
 -- الحماية الحقيقية هي سياسات RLS أعلاه، وليس إخفاء المفتاح.
