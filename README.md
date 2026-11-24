@@ -35,18 +35,33 @@
 
 ```json
 {
-  "version": "0.4.1",
-  "apkUrl": "https://github.com/dotee313/ROGASTORE/releases/download/v0.4.1/app-release.apk",
+  "version": "0.4.2",
+  "apkUrl": "https://github.com/dotee313/ROGASTORE/releases/download/v0.4.2/app-release.apk",
   "notes": "تحسينات وتحديثات"
 }
 ```
 
 ارفع الرقم فقط عندما تنشر إصداراً حقيقياً؛ إذا كان `apkUrl` فارغاً فلن يحدث تنزيل.
-عند دفع وسم `v0.4.1` يقوم workflow `release.yml` ببناء APK وإرفاقه بالإصدار تلقائياً.
+عند دفع وسم `v0.4.2` يقوم workflow `release.yml` ببناء APK وإرفاقه بالإصدار تلقائياً.
 
-الإصدار الحالي المفعّل للتحديث الذاتي هو `v0.4.1`، ورابطه المباشر:
-`https://github.com/dotee313/ROGASTORE/releases/download/v0.4.1/app-release.apk`
+الإصدار الحالي المفعّل للتحديث الذاتي هو `v0.4.2`، ورابطه المباشر:
+`https://github.com/dotee313/ROGASTORE/releases/download/v0.4.2/app-release.apk`
 عند نشر إصدار جديد: حدّث `version` و`apkUrl` في هذا الملف، ثم ادفع وسم الإصدار.
+
+## توقيع APK (مفتاح واحد لكل الإصدارات)
+
+كل إصدار يُوقّع بنفس المفتاح، وإلا رفض Android تثبيت التحديث فوق الإصدار السابق. المفتاح **ليس** داخل المستودع العام، بل مخزّن كأسرار مشفّرة في GitHub:
+
+| السرّ | الغرض |
+|---|---|
+| `ANDROID_KEYSTORE_BASE64` | ملف `roga-release.jks` بصيغة base64 |
+| `ANDROID_KEYSTORE_PASSWORD` | كلمة مرور المتجر |
+| `ANDROID_KEY_ALIAS` | اسم المفتاح (`roga-release`) |
+| `ANDROID_KEY_PASSWORD` | كلمة مرور المفتاح |
+
+السكربت `scripts/configure-signing.sh` يفكّ المفتاح ويضبط `build.gradle` قبل كل بناء، في كلٍّ من `build.yml` و`release.yml`.
+
+> تنبيه: الإصدارات السابقة كانت موقّعة بمفتاح تصحيح الأخطاء المؤقت. بعد تثبيت هذا الإصدار أول مرة، ستعمل التحديثات اللاحقة تلقائياً بنفس التوقيع.
 
 ## التقييمات والتعليقات
 
@@ -58,23 +73,22 @@
 
 المخطط الكامل موجود في `supabase/schema.sql`. نفّذه من SQL Editor في مشروع Supabase، ثم:
 
-1. افتح `Authentication → Email Templates → Magic Link` واستبدل `{{ .ConfirmationURL }}` بـ `{{ .Token }}`. بهذا يُرسَل للمستخدم رمز من ٦ أرقام بدل رابط التفعيل.
-2. سجّل الدخول من تبويب **حسابي** بإيميل `@fatimiyoun.me` (التسجيل مفتوح لهذا النطاق فقط، ويُمنع أي نطاق آخر على مستوى الخادم)، ثم أدخل الرمز المرسل.
-3. امنح نفسك صلاحية الأدمن من SQL Editor:
+1. أنشئ حسابك بإيميل `@fatimiyoun.me` (التسجيل مفتوح لهذا النطاق فقط، ويُمنع أي نطاق آخر على مستوى الخادم).
+2. امنح نفسك صلاحية الأدمن من SQL Editor:
 
    ```sql
    update public.profiles set role = 'admin'
    where lower(email) = 'yourname@fatimiyoun.me';
    ```
 
-4. أضف السرّين التاليين في `Settings → Secrets and variables → Actions` للمستودع:
+3. أضف السرّين التاليين في `Settings → Secrets and variables → Actions` للمستودع:
 
    | الاسم | القيمة |
    |---|---|
    | `SUPABASE_URL` | رابط المشروع مثل `https://xxxx.supabase.co` |
    | `SUPABASE_ANON_KEY` | مفتاح `anon` العام من `Project Settings → API` |
 
-5. أعد تشغيل workflow `Build APK` أو ادفع وسم إصدار جديد.
+4. أعد تشغيل workflow `Build APK` أو ادفع وسم إصدار جديد.
 
 التبويب **حسابي** يظهر فقط رسالة "الحسابات غير مفعّلة لهذا البناء" إذا لم تُضف السرّين.
 
