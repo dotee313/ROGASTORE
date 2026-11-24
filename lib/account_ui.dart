@@ -15,8 +15,8 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   final _email = TextEditingController();
-  final _password = TextEditingController();
-  bool _signUp = false;
+  final _code = TextEditingController();
+  bool _otpSent = false;
   bool _busy = false;
   bool? _admin;
 
@@ -37,24 +37,39 @@ class _AccountPageState extends State<AccountPage> {
         .showSnackBar(SnackBar(content: Text(text)));
   }
 
-  Future<void> _submit() async {
+  Future<void> _sendCode() async {
     final email = _email.text.trim();
-    final password = _password.text;
     if (!isAllowedEmail(email)) {
       _snack('يُسمح فقط بإيميلات @$allowedEmailDomain');
       return;
     }
     setState(() => _busy = true);
-    final error = _signUp
-        ? await account.signUp(email: email, password: password)
-        : await account.signIn(email: email, password: password);
+    final error = await account.sendOtp(email);
+    if (!mounted) return;
+    setState(() {
+      _busy = false;
+      if (error == null) _otpSent = true;
+    });
+    _snack(error ?? 'أُرسل رمز مكوّن من ٦ أرقام إلى بريدك');
+  }
+
+  Future<void> _verifyCode() async {
+    final email = _email.text.trim();
+    final code = _code.text.trim();
+    if (code.length != 6 || int.tryParse(code) == null) {
+      _snack('أدخل رمزاً مكوّناً من ٦ أرقام');
+      return;
+    }
+    setState(() => _busy = true);
+    final error = await account.verifyOtp(email: email, token: code);
     if (!mounted) return;
     setState(() => _busy = false);
-    _snack(error ??
-        (_signUp
-            ? 'تم إنشاء الحساب — تحقق من بريدك لتفعيله'
-            : 'تم تسجيل الدخول'));
-    if (error == null) await _refreshRole();
+    if (error != null) {
+      _snack(error);
+      return;
+    }
+    _snack('تم تسجيل الدخول');
+    await _refreshRole();
   }
 
   @override
@@ -94,44 +109,69 @@ class _AccountPageState extends State<AccountPage> {
             style: TextStyle(
                 color: C.gold, fontSize: 22, fontWeight: FontWeight.bold)),
         const SizedBox(height: 6),
-        Text('التسجيل متاح لإيميلات @$allowedEmailDomain فقط',
+        Text('الدخول برمز من ٦ أرقام لإيميلات @$allowedEmailDomain فقط',
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 11, color: C.goldSoft)),
         const SizedBox(height: 24),
         TextField(
           controller: _email,
           keyboardType: TextInputType.emailAddress,
+          enabled: !_otpSent,
           style: const TextStyle(color: C.gold),
           decoration: _input('name@fatimiyoun.me'),
         ),
-        const SizedBox(height: 12),
-        TextField(
-          controller: _password,
-          obscureText: true,
-          style: const TextStyle(color: C.gold),
-          decoration: _input('كلمة المرور'),
-        ),
-        const SizedBox(height: 18),
-        SizedBox(
-          height: 50,
-          child: FilledButton(
-            style: FilledButton.styleFrom(
-                backgroundColor: C.gold,
-                foregroundColor: C.black,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16))),
-            onPressed: _busy ? null : _submit,
-            child: Text(_signUp ? 'إنشاء حساب' : 'تسجيل الدخول',
-                style: const TextStyle(fontWeight: FontWeight.bold)),
+        if (_otpSent) ...[
+          const SizedBox(height: 12),
+          TextField(
+            controller: _code,
+            keyboardType: TextInputType.number,
+            maxLength: 6,
+            style: const TextStyle(color: C.gold),
+            decoration: _input('الرمز المكوّن من ٦ أرقام'),
           ),
-        ),
-        TextButton(
-          onPressed: () => setState(() => _signUp = !_signUp),
-          child: Text(_signUp
-              ? 'لديك حساب؟ سجّل الدخول'
-              : 'ليس لديك حساب؟ أنشئ واحداً',
-              style: const TextStyle(color: C.goldSoft)),
-        ),
+          const SizedBox(height: 14),
+          SizedBox(
+            height: 50,
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                  backgroundColor: C.gold,
+                  foregroundColor: C.black,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16))),
+              onPressed: _busy ? null : _verifyCode,
+              child: const Text('تأكيد الدخول',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ),
+          TextButton(
+            onPressed: _busy ? null : _sendCode,
+            child: const Text('إعادة إرسال الرمز',
+                style: TextStyle(color: C.goldSoft)),
+          ),
+          TextButton(
+            onPressed: () => setState(() {
+              _otpSent = false;
+              _code.clear();
+            }),
+            child: const Text('تغيير البريد',
+                style: TextStyle(color: C.goldSoft)),
+          ),
+        ] else ...[
+          const SizedBox(height: 18),
+          SizedBox(
+            height: 50,
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                  backgroundColor: C.gold,
+                  foregroundColor: C.black,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16))),
+              onPressed: _busy ? null : _sendCode,
+              child: const Text('إرسال الرمز',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ),
+        ],
       ],
     );
   }

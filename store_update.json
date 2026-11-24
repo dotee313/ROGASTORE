@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0",
-  "apkUrl": "https://github.com/dotee313/ROGASTORE/releases/download/v0.4.0/app-release.apk",
-  "notes": "حسابات المستخدمين ولوحة المطوّر والتقييمات المشتركة"
+  "version": "0.4.1",
+  "apkUrl": "https://github.com/dotee313/ROGASTORE/releases/download/v0.4.1/app-release.apk",
+  "notes": "تسجيل الدخول برمز من ٦ أرقام بدل رابط التفعيل"
 }

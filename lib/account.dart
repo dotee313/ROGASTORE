@@ -60,6 +60,49 @@ class AccountService {
     }
   }
 
+  /// إرسال رمز مكوّن من ٦ أرقام إلى بريد المستخدم.
+  /// يجب أن يحتوي قالب Magic Link في Supabase على `{{ .Token }}` بدل
+  /// `{{ .ConfirmationURL }}` حتى يُرسَل الرقم بدل رابط التفعيل.
+  Future<String?> sendOtp(String email) async {
+    if (!isAllowedEmail(email)) {
+      return 'يُسمح فقط بإيميلات @$allowedEmailDomain';
+    }
+    try {
+      await _client.auth.signInWithOtp(
+        email: email.trim(),
+        shouldCreateUser: true,
+      );
+      return null;
+    } on AuthException catch (e) {
+      return e.message;
+    } catch (_) {
+      return 'تعذّر إرسال الرمز، تحقّق من الإنترنت';
+    }
+  }
+
+  /// التحقق من الرمز وإنشاء جلسة الدخول.
+  Future<String?> verifyOtp({
+    required String email,
+    required String token,
+  }) async {
+    final code = token.trim();
+    if (code.length != 6 || int.tryParse(code) == null) {
+      return 'أدخل رمزاً مكوّناً من ٦ أرقام';
+    }
+    try {
+      await _client.auth.verifyOTP(
+        email: email.trim(),
+        token: code,
+        type: OtpType.email,
+      );
+      return null;
+    } on AuthException catch (e) {
+      return e.message;
+    } catch (_) {
+      return 'تعذّر تأكيد الرمز، حاول مرة أخرى';
+    }
+  }
+
   Future<void> signOut() async {
     if (configured) await _client.auth.signOut();
   }
