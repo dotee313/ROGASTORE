@@ -207,10 +207,8 @@ class AppIcon extends StatelessWidget {
 /// لتجنّب اختفاء الصور عند فشل Image.network داخل التطبيق.
 class _RemoteImage extends StatelessWidget {
   final String url;
-  final double width;
-  final double height;
 
-  const _RemoteImage(this.url, {this.width = 140, this.height = 210});
+  const _RemoteImage(this.url);
 
   @override
   Widget build(BuildContext context) {
@@ -221,11 +219,11 @@ class _RemoteImage extends StatelessWidget {
         builder: (context, snap) {
           if (snap.hasData) {
             return Image.memory(snap.data!,
-                width: width, height: height, fit: BoxFit.cover);
+                width: 140, height: 210, fit: BoxFit.cover);
           }
           return Container(
-            width: width,
-            height: height,
+            width: 140,
+            height: 210,
             color: C.card,
             alignment: Alignment.center,
             child: snap.hasError
