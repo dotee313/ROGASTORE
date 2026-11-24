@@ -172,7 +172,21 @@ $$;
 revoke all on function public.admin_delete_user(uuid) from public;
 grant execute on function public.admin_delete_user(uuid) to authenticated;
 
--- 7) بعد إنشاء حسابك، امنح نفسك صلاحية الأدمن من SQL Editor:
+-- 7) صلاحيات الجداول: سياسات RLS وحدها لا تكفي بدون GRANT.
+grant usage on schema public to anon, authenticated;
+
+grant select on public.apps to anon, authenticated;
+grant all on public.apps to authenticated;
+
+grant select on public.reviews to anon, authenticated;
+grant insert, delete on public.reviews to authenticated;
+
+grant select on public.profiles to authenticated;
+grant update on public.profiles to authenticated;
+
+grant execute on function public.is_admin(uuid) to anon, authenticated;
+
+-- 8) بعد إنشاء حسابك، امنح نفسك صلاحية الأدمن من SQL Editor:
 -- update public.profiles
 -- set role = 'admin'
 -- where lower(email) = 'yourname@gmail.com';
