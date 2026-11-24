@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+import 'account.dart';
+import 'config.dart';
+
 /// المستودع العام هو المصدر الوحيد للكتالوج والصور.
 const String repoRawBase =
     'https://raw.githubusercontent.com/dotee313/ROGASTORE/main/';
@@ -151,6 +154,35 @@ class AppItem {
   String get lookupPackage => packageName.trim().isEmpty ? id : packageName.trim();
 }
 
+List<String> _stringList(dynamic value) {
+  if (value is List) return value.map((e) => e.toString()).toList();
+  if (value is String && value.trim().isNotEmpty) {
+    return value.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+  }
+  return const <String>[];
+}
+
+/// تحويل صفوف Supabase (أعمدة snake_case) إلى عنصر كتالوج.
+AppItem _fromBackendRow(Map<String, dynamic> j) {
+  String s(String key) => (j[key] ?? '').toString();
+  final id = s('id');
+  return AppItem(
+    id: id,
+    name: s('name').isEmpty ? id : s('name'),
+    tagline: s('tagline'),
+    description: s('description'),
+    category: s('category').isEmpty ? 'عام' : s('category'),
+    version: s('version'),
+    size: s('size'),
+    iconUrl: s('icon_url'),
+    apkUrl: s('apk_url'),
+    changelog: s('changelog'),
+    screenshots: _stringList(j['screenshots']),
+    packageName: s('package_name'),
+    reviews: const <CatalogReview>[],
+  );
+}
+
 List<AppItem> _parse(String body) {
   final decoded = jsonDecode(body);
   if (decoded is! Map) return const <AppItem>[];
@@ -164,6 +196,19 @@ List<AppItem> _parse(String body) {
 
 /// الكتالوج البعيد أولاً، والنسخة المدمجة كحل احتياطي عند انقطاع الإنترنت.
 Future<List<AppItem>> loadApps() async {
+  // Supabase أولاً حين يكون مفعّلاً، لأن لوحة الأدمن تعدّل هذا الجدول مباشرة.
+  if (backendReady) {
+    try {
+      final rows = await account.catalogRows();
+      final parsed = rows
+          .map(_fromBackendRow)
+          .where((a) => a.id.isNotEmpty)
+          .toList();
+      if (parsed.isNotEmpty) return parsed;
+    } catch (_) {
+      // نكمل إلى الكتالوج العام أدناه.
+    }
+  }
   try {
     final r = await http
         .get(Uri.parse('$catalogUrl?ts=${DateTime.now().millisecondsSinceEpoch}'))

@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'account.dart';
+import 'account_ui.dart';
 import 'catalog.dart';
 import 'services.dart';
 import 'theme.dart';
@@ -37,6 +39,7 @@ class _ShellState extends State<Shell> {
               StorePage(),
               UpdatesPage(),
               SettingsPage(),
+              AccountPage(),
               AboutPage(),
             ]),
           ),
@@ -51,6 +54,8 @@ class _ShellState extends State<Shell> {
           NavigationDestination(
               icon: Icon(Icons.system_update_alt_outlined), label: 'التحديثات'),
           NavigationDestination(icon: Icon(Icons.tune), label: 'الإعدادات'),
+          NavigationDestination(
+              icon: Icon(Icons.account_circle_outlined), label: 'حسابي'),
           NavigationDestination(
               icon: Icon(Icons.info_outline), label: 'عن روجا'),
         ],
@@ -460,8 +465,33 @@ class _DetailsPageState extends State<DetailsPage> {
   Future<void> _loadReviews() async {
     final local = updateManager.reviews?.load(widget.app.id) ??
         const <CatalogReview>[];
+    final remote = await account.remoteReviews(widget.app.id);
+    final remoteReviews = remote.map((r) {
+      final rating = (r['rating'] is num
+              ? (r['rating'] as num).toInt()
+              : int.tryParse(r['rating'].toString()) ?? 5)
+          .clamp(1, 5)
+          .toInt();
+      final created = (r['created_at'] ?? '').toString();
+      return CatalogReview(
+        author: (r['author'] ?? 'مستخدم').toString(),
+        rating: rating,
+        text: (r['text'] ?? '').toString(),
+        date: created.length >= 10 ? created.substring(0, 10) : '',
+      );
+    }).toList();
+
+    final all = <CatalogReview>[
+      ...widget.app.reviews,
+      ...local,
+      ...remoteReviews,
+    ];
+    final seen = <String>{};
+    final unique = all.where((r) {
+      return seen.add('${r.author}|${r.rating}|${r.text}|${r.date}');
+    }).toList();
     if (!mounted) return;
-    setState(() => _reviews = [...widget.app.reviews, ...local]);
+    setState(() => _reviews = unique);
   }
 
   Future<void> _download() async {
@@ -681,6 +711,14 @@ class _DetailsPageState extends State<DetailsPage> {
                       borderSide: const BorderSide(color: C.line)),
                 ),
               ),
+              if (!account.signedIn)
+                const Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
+                    'سجّل الدخول من تبويب «حسابي» لحفظ تقييمك للجميع.',
+                    style: TextStyle(fontSize: 11, color: C.purpleLight),
+                  ),
+                ),
             ]),
           ),
           actions: [
@@ -693,15 +731,32 @@ class _DetailsPageState extends State<DetailsPage> {
                   backgroundColor: C.gold, foregroundColor: C.black),
               onPressed: () async {
                 final now = DateTime.now().toIso8601String().substring(0, 10);
-                await updateManager.reviews?.add(
-                  widget.app.id,
-                  CatalogReview(
-                    author: name.text.trim().isEmpty ? 'مستخدم' : name.text.trim(),
-                    rating: rating,
-                    text: text.text.trim(),
-                    date: now,
-                  ),
+                final author =
+                    name.text.trim().isEmpty ? 'مستخدم' : name.text.trim();
+                final review = CatalogReview(
+                  author: author,
+                  rating: rating,
+                  text: text.text.trim(),
+                  date: now,
                 );
+                try {
+                  if (account.signedIn) {
+                    await account.addReview(
+                      appId: widget.app.id,
+                      author: author,
+                      rating: rating,
+                      text: review.text,
+                    );
+                  } else {
+                    await updateManager.reviews?.add(widget.app.id, review);
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('تعذّر حفظ التقييم: $e')));
+                  }
+                  return;
+                }
                 if (context.mounted) Navigator.pop(context);
                 await _loadReviews();
               },

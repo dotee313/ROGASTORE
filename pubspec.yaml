@@ -19,6 +19,8 @@ dependencies:
   installed_apps: ^2.2.1
   package_info_plus: ^10.2.2
   shared_preferences: ^2.5.6
+  supabase_flutter: ^2.18.3
+  file_picker: ^13.4.1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

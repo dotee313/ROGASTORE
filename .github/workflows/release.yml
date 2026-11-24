@@ -42,7 +42,14 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze
       - run: dart run flutter_launcher_icons
-      - run: flutter build apk --release
+      - name: Build APK
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          flutter build apk --release \
+            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+            --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY"
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
