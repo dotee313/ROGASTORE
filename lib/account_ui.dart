@@ -423,12 +423,11 @@ class _AppEditorState extends State<_AppEditor> {
       );
 
   Future<void> _pickApk() async {
-    final result = await FilePicker.platform.pickFiles(
+    final files = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: const ['apk'],
-      withData: false,
     );
-    final file = result?.files.singleOrNull;
+    final file = files.singleOrNull;
     if (file == null) return;
     setState(() => _uploading = true);
     try {

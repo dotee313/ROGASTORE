@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -105,7 +103,7 @@ class AccountService {
 
   /// يرفع APK إلى Storage العام ويُرجع رابطه المباشر.
   Future<String> uploadApk(PlatformFile file) async {
-    final bytes = file.bytes ?? await File(file.path!).readAsBytes();
+    final bytes = await file.readAsBytes();
     final ext = (file.extension ?? 'apk').replaceAll(RegExp(r'[^a-z0-9]'), '');
     final name = '${DateTime.now().millisecondsSinceEpoch}.app.$ext';
     final path = 'apps/$name';
