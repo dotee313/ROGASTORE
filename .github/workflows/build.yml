@@ -5,6 +5,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# منع بناءين متزامنين حتى لا نحصل على 429 من Maven Central.
+concurrency:
+  group: apk-build
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
 
+# نفس المجموعة في build.yml: لا يتزاحم البناء مع الإصدار على Maven Central.
+concurrency:
+  group: apk-build
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
